@@ -1,10 +1,17 @@
+"""
+ABOUT: Contains all analytics and plotting libraries (MattMOUSE, MattPLOT)
+AUTHOR: djbhatia@ucsd.edu
+
+Jan. 2020
+"""
 # System Python
 import sys
 import logging
 import datetime
+import matplotlib.pyplot as plt
 
-class MattMouse:
-    def __init__(self, log, data, start_date, cage_num, mouse_num, end_date=False):
+class MattMOUSE:
+    def __init__(self, log, data, start_date, cage_num, mouse_num, feature, end_date=False):
         """Library for Gathering Datapoints for one given mouse"""
         self._log = log
         self._data = data
@@ -15,6 +22,7 @@ class MattMouse:
             self._end_date = str(datetime.datetime.now())[:10]
         self._cage = cage_num
         self._mouse = mouse_num
+        self._feature = feature
         self._log.info("Mouse Object Initialized for Mouse {}".format(self._mouse))
         self._log.debug("Looping through dates {} to {}".format(self._start_date, self._end_date))
 
@@ -33,7 +41,6 @@ class MattMouse:
             self._no_lick.append(self.identify_no_lick(table, date))
             self._overall_correct.append(self.identify_overall_corrert(table, date))
             self._absolute_bias.append(self.identify_absolute_bias(table, date))
-            break
 
     def datetime_range(self, start=None, end=None):
         span = end - start
@@ -61,7 +68,10 @@ class MattMouse:
 
     def identify_phase(self, table):
         """Return the phase with data from a single date"""
-        return int(table[0][9])
+        try:
+            return int(table[0][9])
+        except Exception as e:
+            return None
 
     def identify_no_lick(self, table, date):
         """Return the % No Licks with data from a single date"""
@@ -80,8 +90,10 @@ class MattMouse:
                     if (row[5] == 0):
                         no_licks += 1
         try:
-            return round((no_licks / attempts) * 100, 4)
+            no_lick = round((no_licks / attempts) * 100, 4)
+            self._log.info("Mouse {} on {} had Overall Correct of {}".format(self._mouse, date, no_lick))
         except Exception as e:
+            self._log.warning("Mouse {} on {} had INVALID No Lick!".format(self._mouse, date))
             return None
 
     def identify_overall_corrert(self, table, date):
@@ -102,8 +114,11 @@ class MattMouse:
                     if (row[5] != 0 and row[4] == 1):
                         incorrect += 1
         try:
-            return round((correct / (correct + incorrect)) * 100, 4)
+            overall_correct = round((correct / (correct + incorrect)) * 100, 4)
+            self._log.info("Mouse {} on {} had Overall Correct of {}".format(self._mouse, date, overall_correct))
+            return overall_correct
         except Exception as e:
+            self._log.warning("Mouse {} on {} had INVALID Overall Correct!".format(self._mouse, date))
             return None
 
     def identify_absolute_bias(self, table, date):
@@ -140,19 +155,25 @@ class MattMouse:
                     if (row[3] != 0 and row[4] == 0 and row[5] != 0):
                         left += 1
 
-        percent_right = right / template
-        percent_left = left / non_template
         try:
             # Identify Bias
+            percent_right = right / template
+            percent_left = left / non_template
             bias = round((percent_right / (percent_right + percent_left)) * 100, 4)
             # Identify Absolute Bias
             absolute_bias = round(abs(bias - 50), 4)
+            self._log.info("Mouse {} on {} had ABS Bias of {}".format(self._mouse, date, absolute_bias))
         except ZeroDivisionError as e:
-            self._log.warning("Mouse {} on {} had INVALID Bias...".format(self._mouse, date))
+            self._log.warning("Mouse {} on {} had INVALID Bias!".format(self._mouse, date))
             absolute_bias = None
 
         return absolute_bias
 
 class MattPLOT:
-    def __init__(self, data_tuple):
-        
+    def __init__(self, log, mouse_object):
+        """Library for Plotting and Saving datapoints of a MattMOUSE Object"""
+        self._log = log
+        self._mouse = mouse_object
+
+    def make_log(self):
+        plt.figure(figsize=(8,5))

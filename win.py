@@ -21,18 +21,16 @@ def main():
         cage = experiement[cage_num]
         mice = [key for key in cage if "Day" not in key]
         for mouse in mice:
+            feature = cage[mouse][0]
             death_date = cage[mouse][1]
             # Iterate thorugh data table and generate Mouse Objects
             if death_date:
-                stuart_little = MattMATH.MattMouse(log, data_table, cage["Day 0"], cage_num, mouse, end_date=death_date)
+                stuart_little = MattMATH.MattMOUSE(log, data_table, cage["Day 0"], cage_num, mouse, feature, end_date=death_date)
             else:
-                stuart_little = MattMATH.MattMouse(log, data_table, cage["Day 0"], cage_num, mouse)
+                stuart_little = MattMATH.MattMOUSE(log, data_table, cage["Day 0"], cage_num, mouse, feature)
             stuart_little.collect_plot_datapoints()
-            print("Phases ", stuart_little._phases)
-            print("% No Lick ", stuart_little._no_lick)
-            print("% ABS Bias ", stuart_little._absolute_bias)
-            print("% Overall Correct ", stuart_little._overall_correct)
 
             # Generate Plot
+
 if __name__=="__main__":
     main()
