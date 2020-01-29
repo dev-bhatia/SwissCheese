@@ -31,6 +31,9 @@ def main():
             stuart_little.collect_plot_datapoints()
 
             # Generate Plot
+            mickey_mouse = MattMATH.MattPLOT(log, stuart_little)
+            mickey_mouse.make_plot()
+
 
 if __name__=="__main__":
     main()

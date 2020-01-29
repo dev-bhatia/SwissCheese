@@ -6,8 +6,10 @@ Jan. 2020
 """
 # System Python
 import sys
+import pylab
 import logging
 import datetime
+import numpy as np
 import matplotlib.pyplot as plt
 
 class MattMOUSE:
@@ -37,7 +39,7 @@ class MattMOUSE:
         for date in self._dates:
             self._log.info("Evaluating Mouse {} on {}...".format(self._mouse, date))
             table = self.construct_singular_date_table(date)
-            self._phases.append(self.identify_phase(table))
+            self._phases.append(self.identify_phase(table, date))
             self._no_lick.append(self.identify_no_lick(table, date))
             self._overall_correct.append(self.identify_overall_corrert(table, date))
             self._absolute_bias.append(self.identify_absolute_bias(table, date))
@@ -66,11 +68,14 @@ class MattMOUSE:
                     singular_date_table.append(row)
         return singular_date_table
 
-    def identify_phase(self, table):
+    def identify_phase(self, table, date):
         """Return the phase with data from a single date"""
         try:
-            return int(table[0][9])
+            phase = int(table[0][9])
+            self._log.info("Mouse {} on {} was on Phase {}".format(self._mouse, date, phase))
+            return phase
         except Exception as e:
+            self._log.warning("Mouse {} on {} has NO PHASE".format(self._mouse, date))
             return None
 
     def identify_no_lick(self, table, date):
@@ -91,7 +96,9 @@ class MattMOUSE:
                         no_licks += 1
         try:
             no_lick = round((no_licks / attempts) * 100, 4)
-            self._log.info("Mouse {} on {} had Overall Correct of {}".format(self._mouse, date, no_lick))
+            self._log.info("Mouse {} on {} had {} Attempts, {} were No Licks".format(self._mouse, date, attempts, no_licks))
+            self._log.info("Mouse {} on {} had No Lick of {}".format(self._mouse, date, no_lick))
+            return no_lick
         except Exception as e:
             self._log.warning("Mouse {} on {} had INVALID No Lick!".format(self._mouse, date))
             return None
@@ -115,6 +122,8 @@ class MattMOUSE:
                         incorrect += 1
         try:
             overall_correct = round((correct / (correct + incorrect)) * 100, 4)
+            self._log.info("Mouse {} on {} had {} Correct Licks".format(self._mouse, date, correct))
+            self._log.info("Mouse {} on {} had {} Inorrect Licks".format(self._mouse, date, incorrect))
             self._log.info("Mouse {} on {} had Overall Correct of {}".format(self._mouse, date, overall_correct))
             return overall_correct
         except Exception as e:
@@ -154,7 +163,6 @@ class MattMOUSE:
                     # Count Number of Left Side Licks
                     if (row[3] != 0 and row[4] == 0 and row[5] != 0):
                         left += 1
-
         try:
             # Identify Bias
             percent_right = right / template
@@ -162,6 +170,9 @@ class MattMOUSE:
             bias = round((percent_right / (percent_right + percent_left)) * 100, 4)
             # Identify Absolute Bias
             absolute_bias = round(abs(bias - 50), 4)
+            self._log.info("Mouse {} on {} had Right Bias of {}".format(self._mouse, date, round(percent_right * 100, 4)))
+            self._log.info("Mouse {} on {} had Left Bias of {}".format(self._mouse, date, round(percent_left * 100, 4)))
+            self._log.info("Mouse {} on {} had Bias of {}".format(self._mouse, date, bias))
             self._log.info("Mouse {} on {} had ABS Bias of {}".format(self._mouse, date, absolute_bias))
         except ZeroDivisionError as e:
             self._log.warning("Mouse {} on {} had INVALID Bias!".format(self._mouse, date))
@@ -173,7 +184,79 @@ class MattPLOT:
     def __init__(self, log, mouse_object):
         """Library for Plotting and Saving datapoints of a MattMOUSE Object"""
         self._log = log
-        self._mouse = mouse_object
+        self._subject = mouse_object
 
-    def make_log(self):
+    def debug(self):
+        print(self._subject._overall_correct)
+        print(self._subject._absolute_bias)
+        print(self._subject._no_lick)
+
+    def make_plot(self):
         plt.figure(figsize=(8,5))
+        pylab.rcParams['xtick.major.pad']='8'
+        pylab.rcParams['xtick.minor.pad']='8'
+        plt.rcParams['axes.xmargin'] = 0
+
+        # Plot x-axis Phases and Colors
+        # TODO: Fix up this sloppy implementation
+        index = 0
+        # days = []
+        x_count = []
+        for phase in self._subject._phases:
+            # if (phase != None):
+            #     days.append(phase)
+            # else:
+            #     days.append(None)
+            x_count.append(index)
+            index += 1
+
+        # Set x-axis phase colors
+        days_colors = []
+        for mouse_phase in self._subject._phases:
+            if (mouse_phase == 0):
+                days_colors.append('#000000') # BLACK
+            elif (mouse_phase == 1):
+                days_colors.append('#D3200C') # RED
+            elif (mouse_phase == 2):
+                days_colors.append('#134DD6') # BLUE
+            elif (mouse_phase == 3):
+                days_colors.append('#009607') # GREEN
+            elif (mouse_phase == 4):
+                days_colors.append('#AF288B') # PURPLE
+            else:
+                days_colors.append('#FFFFFF') # WHITE
+
+        # Plot Data
+        plt.plot(x_count, self._subject._overall_correct, color="g",
+                 label="OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 2)),
+                 lw=1.0, marker="o")
+        plt.plot(x_count, self._subject._no_lick, color="r",
+                 label="No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 2)),
+                 lw=1.0, marker="o")
+        plt.plot(x_count, self._subject._absolute_bias, color="b",
+                 label="ABS Bias: {}%".format(round(self._subject._absolute_bias[len(self._subject._absolute_bias) - 1], 2)),
+                 lw=1.0, marker="o")
+
+        # Format titles
+        plt.yticks(np.arange(0, 101, step=10))
+        plt.xticks(x_count, fontsize='small', rotation='-22.5')
+        for ticklabel, tickcolor in zip(plt.gca().get_xticklabels(), days_colors):
+            ticklabel.set_color(tickcolor)
+
+        plt.grid()
+        plt_title = "Cage {} Mouse {} - {} - Phase {} - Bias".format(
+                        self._subject._cage, self._subject._mouse,
+                        self._subject._feature
+        )
+        plt.legend(title="Cage {} Mouse {} - {}".format(self._subject._cage,
+                                            self._subject._mouse,
+                                            self._subject._feature),
+                                            title_fontsize="large",
+                                            fontsize="medium",
+                                            loc="upper center",
+                                            bbox_to_anchor=(0.5, 1.15),
+                                            ncol=3,
+                                            fancybox=True)
+        plt.xlabel('Day')
+        plt.ylabel('Performance')
+        plt.show()
