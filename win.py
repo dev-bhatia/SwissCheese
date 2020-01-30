@@ -1,6 +1,6 @@
 import os
 import json
-from MattLAB import MattLOG, MattSQL, MattMATH
+from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL
 
 def main():
     # Create Logging Object
@@ -34,6 +34,9 @@ def main():
             mickey_mouse = MattMATH.MattPLOT(log, stuart_little)
             mickey_mouse.make_plot()
 
+    # Create Email
+    snail_mail = MattMAIL.MattMAIL(log)
+    snail_mail.snail_mail()
 
 if __name__=="__main__":
     main()

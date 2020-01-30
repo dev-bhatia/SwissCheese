@@ -144,24 +144,24 @@ class MattMOUSE:
                     else:
                         non_template += 1
                     # Count Number of Right Side Licks
-                    if (row[3] == 0 and row[4] == 0 and row[5] != 0):
+                    if (row[3] == 0 and row[4] == 0 and row[5] == 1):
                         right += 1
                     # Count Number of Left Side Licks
-                    if (row[3] != 0 and row[4] == 0 and row[5] != 0):
+                    if (row[3] != 0 and row[4] == 0 and row[5] == -1):
                         left += 1
         else:
             for row in table:
-                if (row[6] != 0):
+                if (row[6] == 0):
                     # Count Number of Template and Non-Template Songs
                     if (row[3] == 0):
                         template += 1
                     else:
                         non_template += 1
                     # Count Number of Right Side Licks
-                    if (row[3] == 0 and row[4] == 0 and row[5] != 0):
+                    if (row[3] == 0 and row[4] == 0 and row[5] == 1):
                         right += 1
                     # Count Number of Left Side Licks
-                    if (row[3] != 0 and row[4] == 0 and row[5] != 0):
+                    if (row[3] > 0 and row[4] == 0 and row[5] == -1):
                         left += 1
         try:
             # Identify Bias
@@ -170,6 +170,8 @@ class MattMOUSE:
             bias = round((percent_right / (percent_right + percent_left)) * 100, 4)
             # Identify Absolute Bias
             absolute_bias = round(abs(bias - 50), 4)
+            self._log.info("Mouse {} on {} had {} Template Songs".format(self._mouse, date, template))
+            self._log.info("Mouse {} on {} had {} Non Template Songs".format(self._mouse, date, non_template))
             self._log.info("Mouse {} on {} had Right Bias of {}".format(self._mouse, date, round(percent_right * 100, 4)))
             self._log.info("Mouse {} on {} had Left Bias of {}".format(self._mouse, date, round(percent_left * 100, 4)))
             self._log.info("Mouse {} on {} had Bias of {}".format(self._mouse, date, bias))
@@ -227,15 +229,24 @@ class MattPLOT:
                 days_colors.append('#FFFFFF') # WHITE
 
         # Plot Data
+        try:
+            oc_label = "OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 2))
+        except TypeError as e:
+            oc_label = ""
+        try:
+            nl_label = "No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 2))
+        except TypeError as e:
+            nl_label = ""
+        try:
+            ab_label = "ABS Bias: {}%".format(round(self._subject._absolute_bias[len(self._subject._absolute_bias) - 1], 2))
+        except TypeError as e:
+            ab_label = ""
         plt.plot(x_count, self._subject._overall_correct, color="g",
-                 label="OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 2)),
-                 lw=1.0, marker="o")
+                 label=oc_label, lw=1.0, marker="o")
         plt.plot(x_count, self._subject._no_lick, color="r",
-                 label="No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 2)),
-                 lw=1.0, marker="o")
+                 label=nl_label, lw=1.0, marker="o")
         plt.plot(x_count, self._subject._absolute_bias, color="b",
-                 label="ABS Bias: {}%".format(round(self._subject._absolute_bias[len(self._subject._absolute_bias) - 1], 2)),
-                 lw=1.0, marker="o")
+                 label=ab_label, lw=1.0, marker="o")
 
         # Format titles
         plt.yticks(np.arange(0, 101, step=10))
@@ -246,17 +257,11 @@ class MattPLOT:
         plt.grid()
         plt_title = "Cage {} Mouse {} - {} - Phase {} - Bias".format(
                         self._subject._cage, self._subject._mouse,
-                        self._subject._feature
-        )
-        plt.legend(title="Cage {} Mouse {} - {}".format(self._subject._cage,
-                                            self._subject._mouse,
-                                            self._subject._feature),
-                                            title_fontsize="large",
-                                            fontsize="medium",
-                                            loc="upper center",
-                                            bbox_to_anchor=(0.5, 1.15),
-                                            ncol=3,
-                                            fancybox=True)
+                        self._subject._feature,
+                        self._subject._phases[len(self._subject._phases) - 1])
+        plt.legend(title=plt_title, title_fontsize="large", fontsize="medium",
+                   loc="upper center", bbox_to_anchor=(0.5, 1.15),
+                   ncol=3, fancybox=True)
         plt.xlabel('Day')
         plt.ylabel('Performance')
-        plt.show()
+        plt.savefig("plots/m{}.png".format(self._subject._mouse))
