@@ -26,16 +26,18 @@ class MattMAIL:
                 self._log.critical('Terminating Program...')
                 sys.exit(1)
 
-        def snail_mail(self, developer_mode=1):
+        def snail_mail(self, developer_mode):
             """
             Gather Plots, and send Email
             """
             self._log.debug('FORMATTING EMAIL...')
             date = datetime.now().strftime('%Y-%m-%d')
-            recipiants = self._creds['recipiants']
-            if developer_mode:
-                recipiants = ['djbhatia@ucsd.edu']
-
+            if (developer_mode == "team"):
+                self._log.info("Emailing Team...")
+                recipiants = self._creds['recipiants']
+            else:
+                self._log.info("Developer Mode ONLY, Emailing Dev...")
+                recipiants = self._creds['beta']
             # Create the root message and fill in the from, to, and subject headers
             msgRoot = MIMEMultipart('related')
             msgRoot['Subject'] = "{} - Mouse Behavior Plots".format(date)
@@ -58,7 +60,7 @@ class MattMAIL:
             # Attach Banner
             email_msg += """
                             <font face="courier" size="4">
-                            <b>Hello Team, That's right ... emails are back! :)</b><br><br>
+                            <b>Hello Team,</b><br><br>
                             <font size="2">Phase 0: BLACK  Phase 1: <font color='red'>RED</font>  Phase 2: <font color='blue'>BLUE</font>  Phase 3: <font color='green'>GREEN</font>  Phase 4: <font color='purple'>PURPLE</font><br><br></font>
                             <font size="2"><b>Known Issues being worked on...</b><br>
                                            1. Error Correction will be introduced to fix discrepencies between Plots and Lab Notebook.<br>
@@ -88,6 +90,6 @@ class MattMAIL:
             s.ehlo()
             s.starttls()
             s.ehlo()
-            s.login('devjbhatia', self._creds['password'])
+            s.login(self._creds['sender'].split('@')[0], self._creds['password'])
             s.sendmail(self._creds['sender'], recipiants, msgRoot.as_string())
             s.quit()

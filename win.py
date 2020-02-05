@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL
 
@@ -23,11 +24,15 @@ def main():
         for mouse in mice:
             feature = cage[mouse][0]
             death_date = cage[mouse][1]
+            try:
+                start_date = cage[mouse][2]
+            except Exception as e:
+                start_date = cage["Day 0"]
             # Iterate thorugh data table and generate Mouse Objects
             if death_date:
-                stuart_little = MattMATH.MattMOUSE(log, data_table, cage["Day 0"], cage_num, mouse, feature, end_date=death_date)
+                stuart_little = MattMATH.MattMOUSE(log, data_table, start_date, cage_num, mouse, feature, end_date=death_date)
             else:
-                stuart_little = MattMATH.MattMOUSE(log, data_table, cage["Day 0"], cage_num, mouse, feature)
+                stuart_little = MattMATH.MattMOUSE(log, data_table, start_date, cage_num, mouse, feature)
             stuart_little.collect_plot_datapoints()
 
             # Generate Plot
@@ -36,7 +41,12 @@ def main():
 
     # Create Email
     snail_mail = MattMAIL.MattMAIL(log)
-    snail_mail.snail_mail()
+    # TODO: try using the -- ting
+    try:
+        mode = sys.argv[1]
+    except IndexError as e:
+        mode = "developer_mode"
+    snail_mail.snail_mail(mode)
 
 if __name__=="__main__":
     main()
