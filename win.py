@@ -30,7 +30,8 @@ def main():
                 start_date = cage["Day 0"]
             # Iterate thorugh data table and generate Mouse Objects
             if death_date:
-                stuart_little = MattMATH.MattMOUSE(log, data_table, start_date, cage_num, mouse, feature, end_date=death_date)
+                #stuart_little = MattMATH.MattMOUSE(log, data_table, start_date, cage_num, mouse, feature, end_date=death_date)
+            	log.info("Skipping mouse {} since it is DEAD".format(mouse))
             else:
                 stuart_little = MattMATH.MattMOUSE(log, data_table, start_date, cage_num, mouse, feature)
             stuart_little.collect_plot_datapoints()

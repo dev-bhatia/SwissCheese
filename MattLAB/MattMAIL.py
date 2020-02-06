@@ -60,16 +60,16 @@ class MattMAIL:
             # Attach Banner
             email_msg += """
                             <font face="courier" size="4">
-                            <b>Hello Team,</b><br><br>
-                            <font size="2">Phase 0: BLACK  Phase 1: <font color='red'>RED</font>  Phase 2: <font color='blue'>BLUE</font>  Phase 3: <font color='green'>GREEN</font>  Phase 4: <font color='purple'>PURPLE</font><br><br></font>
-                            <font size="2"><b>Known Issues being worked on...</b><br>
-                                           1. Error Correction will be introduced to fix discrepencies between Plots and Lab Notebook.<br>
-                                           2. ABS Bias Value is being investigated (we know it is erroring when counting # of Left Licks)<br>
+                            <b>Team,</b><br><br>
+                            <font size="2"><b>Updates...</b><br>
+                                           1. Error Correction: plan is to integrate slack to "message" our database (hopefully!).<br>
+                                           2. ABS Bias Value Correction: Working on counting # of Left Licks<br>
                             </font>
                             <font size="2"><br><b>Please do not hesitate to recommend additional features or bring up issues!</b><br></font><br>
                             </font>
                             <font face="courier" size="3"></b>
                             <b>-- Dev</b><br>
+                            <font size="2">Phase 0: BLACK  Phase 1: <font color='red'>RED</font>  Phase 2: <font color='blue'>BLUE</font>  Phase 3: <font color='green'>GREEN</font>  Phase 4: <font color='purple'>PURPLE</font><br><br></font>
                             </font></b>
                          """
             # Attach Plots
