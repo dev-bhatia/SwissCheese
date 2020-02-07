@@ -37,17 +37,22 @@ def main():
             stuart_little.collect_plot_datapoints()
 
             # Generate Plot
-            mickey_mouse = MattMATH.MattPLOT(log, stuart_little)
-            mickey_mouse.make_plot()
+            # mickey_mouse = MattMATH.MattPLOT(log, stuart_little)
+            # mickey_mouse.make_plot()
+
+    # TODO: What precision? 
+    # BIAS
+    # M7 - works
+    # M3 - somedays it's correct, other days, it's not.
 
     # Create Email
     snail_mail = MattMAIL.MattMAIL(log)
     # TODO: try using the -- ting
     try:
         mode = sys.argv[1]
+        snail_mail.snail_mail("developer_mode") # Send email only to developer(s)
     except IndexError as e:
-        mode = "developer_mode"
-    snail_mail.snail_mail(mode)
+        log.info("--> SKIPPING EMAIL SEND <--")
 
 if __name__=="__main__":
     main()

@@ -12,7 +12,7 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
-class MattMOUSE:
+class MattMATH:
     def __init__(self, log, data, start_date, cage_num, mouse_num, feature, end_date=False):
         """Library for Gathering Datapoints for one given mouse"""
         self._log = log
