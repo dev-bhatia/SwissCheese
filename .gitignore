@@ -1,5 +1,5 @@
 database_credentials.json
 email_credentials.json
 experiment_details.json
-logs
-plots
+logs/*
+plots/*
