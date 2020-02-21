@@ -40,7 +40,7 @@ class MattMAIL:
                 recipiants = self._creds['beta']
             # Create the root message and fill in the from, to, and subject headers
             msgRoot = MIMEMultipart('related')
-            msgRoot['Subject'] = "{} - Mouse Behavior Plots".format(date)
+            msgRoot['Subject'] = "{}{}{} Behavior Plots {}".format(u'\U0001F4C8', u'\U0001F9C0', u'\U0001f400', date)
             msgRoot['To'] = " ,".join(recipiants)
             msgRoot['From'] = self._creds['sender']
             msgRoot.preamble = 'This is a multi-part message in MIME format.'
@@ -62,13 +62,13 @@ class MattMAIL:
                             <font face="courier" size="4">
                             <b>Team,</b><br><br>
                             <font size="2"><b>Updates...</b><br>
-                                           1. Error Correction: plan is to integrate slack to "message" our database (hopefully!).<br>
-                                           2. ABS Bias Value Correction: Working on counting # of Left Licks<br>
+                                        1. Error Correction: You can edit values for plots on the SQL GUI, coming soon!<br>
+                                        2. Emails are now automated by out lab computer...let me know if any errors arise.
                             </font>
                             <font size="2"><br><b>Please do not hesitate to recommend additional features or bring up issues!</b><br></font><br>
                             </font>
                             <font face="courier" size="3"></b>
-                            <b>-- Dev</b><br>
+                            <b>- END -</b><br>
                             <font size="2">Phase 0: BLACK  Phase 1: <font color='red'>RED</font>  Phase 2: <font color='blue'>BLUE</font>  Phase 3: <font color='green'>GREEN</font>  Phase 4: <font color='purple'>PURPLE</font><br><br></font>
                             </font></b>
                          """

@@ -5,6 +5,7 @@ AUTHOR: djbhatia@ucsd.edu
 Jan. 2020
 """
 # System Python
+import os
 import sys
 import pylab
 import logging
@@ -265,3 +266,9 @@ class MattPLOT:
         plt.xlabel('Day')
         plt.ylabel('Performance')
         plt.savefig("plots/m{}.png".format(self._subject._mouse))
+
+    def remove_plots(self):
+        """Remove All Plots saved in Plots dir"""
+        self._log.info("Deleting plots...")
+        os.system("rm -rf plots/*")
+        self._log.info("Done deleting plots...")

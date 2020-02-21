@@ -1,9 +1,14 @@
 import os
 import sys
 import json
+import datetime
 from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL
 
 def main():
+    # Remove all logs from logs dir if Monday (clean logs on weekly basis)
+    if not (datetime.datetime.today().weekday()):
+        os.system("rm logs/*")
+
     # Create Logging Object
     tree = MattLOG.MattLOG()
     log = tree.create_log("MouseBehavior")
@@ -48,6 +53,7 @@ def main():
     except IndexError as e:
         mode = "developer_mode"
     snail_mail.snail_mail(mode)
+    mickey_mouse.remove_plots()
 
 if __name__=="__main__":
     main()
