@@ -37,7 +37,7 @@ class MattMAIL:
                 recipiants = self._creds['recipiants']
             else:
                 self._log.info("Developer Mode ONLY, Emailing Dev...")
-                recipiants = self._creds['beta']
+                recipiants = self._creds['developers']
             # Create the root message and fill in the from, to, and subject headers
             msgRoot = MIMEMultipart('related')
             msgRoot['Subject'] = "{}{}{} Behavior Plots {}".format(u'\U0001F4C8', u'\U0001F9C0', u'\U0001f400', date)
