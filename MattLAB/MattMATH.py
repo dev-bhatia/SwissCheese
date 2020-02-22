@@ -270,5 +270,8 @@ class MattPLOT:
     def remove_plots(self):
         """Remove All Plots saved in Plots dir"""
         self._log.info("Deleting plots...")
-        os.system("rm -rf plots/*")
+        if ('win' in sys.platform): #
+            os.system("ECHO Y | del .\\plots\\*")
+        else: # UNIX System
+            os.system("rm plots/*")
         self._log.info("Done deleting plots...")

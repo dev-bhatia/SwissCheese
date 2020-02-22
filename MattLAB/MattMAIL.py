@@ -59,15 +59,13 @@ class MattMAIL:
 
             # Attach Banner
             email_msg += """
-                            <font face="courier" size="4">
-                            <b>Team,</b><br><br>
-                            <font size="2"><b>Updates...</b><br>
+                            <font size="2"><b>Team, Updates...</b><br>
                                         1. Error Correction: You can edit values for plots on the SQL GUI, coming soon!<br>
                                         2. Emails are now automated by out lab computer...let me know if any errors arise.
                             </font>
                             <font size="2"><br><b>Please do not hesitate to recommend additional features or bring up issues!</b><br></font><br>
                             </font>
-                            <font face="courier" size="3"></b>
+                            <font face="courier" size="2"></b>
                             <b>- END -</b><br>
                             <font size="2">Phase 0: BLACK  Phase 1: <font color='red'>RED</font>  Phase 2: <font color='blue'>BLUE</font>  Phase 3: <font color='green'>GREEN</font>  Phase 4: <font color='purple'>PURPLE</font><br><br></font>
                             </font></b>
