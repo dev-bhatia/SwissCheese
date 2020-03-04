@@ -166,15 +166,31 @@ class MattMATH:
                         left += 1
         try:
             # Identify Bias
-            percent_right = right / template
-            percent_left = left / non_template
-            bias = round((percent_right / (percent_right + percent_left)) * 100, 4)
+            percent_right = round((right / template) * 100, 2)
+            percent_left = round((left / non_template) * 100, 2)
+            # percent_right = round(percent_right * 100, 2)
+            # percent_left = round(percent_left * 100, 2)
+            # bias = (round(percent_right * 100, 2) / (round(percent_right * 100, 2) + round(percent_left * 100, 2)))
+            bias = round((percent_right / (percent_right + percent_left)) * 100, 2)
+
+            # Format Rounding
+            # percent_right = round(percent_right * 100, 2)
+            # percent_left = round(percent_left * 100, 2)
+            # bias = round(bias * 100, 2)
+
             # Identify Absolute Bias
             absolute_bias = round(abs(bias - 50), 4)
+            if (bias - 50) > 0:
+                self._bias_side = "RIGHT"
+            elif (bias - 50) < 0:
+                self._bias_side = "LEFT"
+            else:
+                self._bias_side = "NONE"
+            # Log Stats
             self._log.info("Mouse {} on {} had {} Template Songs".format(self._mouse, date, template))
             self._log.info("Mouse {} on {} had {} Non Template Songs".format(self._mouse, date, non_template))
-            self._log.info("Mouse {} on {} had Right Bias of {}".format(self._mouse, date, round(percent_right * 100, 4)))
-            self._log.info("Mouse {} on {} had Left Bias of {}".format(self._mouse, date, round(percent_left * 100, 4)))
+            self._log.info("Mouse {} on {} had Right Bias of {}".format(self._mouse, date, percent_right))
+            self._log.info("Mouse {} on {} had Left Bias of {}".format(self._mouse, date, percent_left))
             self._log.info("Mouse {} on {} had Bias of {}".format(self._mouse, date, bias))
             self._log.info("Mouse {} on {} had ABS Bias of {}".format(self._mouse, date, absolute_bias))
         except ZeroDivisionError as e:
@@ -227,15 +243,15 @@ class MattPLOT:
 
         # Plot Data
         try:
-            oc_label = "OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 2))
+            oc_label = "OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 4))
         except TypeError as e:
             oc_label = ""
         try:
-            nl_label = "No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 2))
+            nl_label = "No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 4))
         except TypeError as e:
             nl_label = ""
         try:
-            ab_label = "ABS Bias: {}%".format(round(self._subject._absolute_bias[len(self._subject._absolute_bias) - 1], 2))
+            ab_label = "ABS Bias: {}%".format(round(self._subject._absolute_bias[len(self._subject._absolute_bias) - 1], 4))
         except TypeError as e:
             ab_label = ""
         plt.plot(x_count, self._subject._overall_correct, color="g",
@@ -252,12 +268,12 @@ class MattPLOT:
             ticklabel.set_color(tickcolor)
 
         plt.grid()
-        plt_title = "Cage {} Mouse {} - {} - Phase {} Day {} - Bias".format(
+        plt_title = "Cage {} Mouse {} - {} - Phase {} - {} Bias".format(
                         self._subject._cage,
                         self._subject._mouse,
                         self._subject._feature,
                         self._subject._phases[len(self._subject._phases) - 1],
-                        x_count[len(x_count) - 1])
+                        self._subject._bias_side)
         plt.legend(title=plt_title, title_fontsize="large", fontsize="medium",
                    loc="upper center", bbox_to_anchor=(0.5, 1.15),
                    ncol=3, fancybox=True)
