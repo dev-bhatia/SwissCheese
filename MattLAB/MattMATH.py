@@ -206,10 +206,6 @@ class MattPLOT:
         # days = []
         x_count = []
         for phase in self._subject._phases:
-            # if (phase != None):
-            #     days.append(phase)
-            # else:
-            #     days.append(None)
             x_count.append(index)
             index += 1
 
@@ -256,10 +252,12 @@ class MattPLOT:
             ticklabel.set_color(tickcolor)
 
         plt.grid()
-        plt_title = "Cage {} Mouse {} - {} - Phase {} - Bias".format(
-                        self._subject._cage, self._subject._mouse,
+        plt_title = "Cage {} Mouse {} - {} - Phase {} Day {} - Bias".format(
+                        self._subject._cage,
+                        self._subject._mouse,
                         self._subject._feature,
-                        self._subject._phases[len(self._subject._phases) - 1])
+                        self._subject._phases[len(self._subject._phases) - 1],
+                        x_count[len(x_count) - 1])
         plt.legend(title=plt_title, title_fontsize="large", fontsize="medium",
                    loc="upper center", bbox_to_anchor=(0.5, 1.15),
                    ncol=3, fancybox=True)
@@ -270,7 +268,7 @@ class MattPLOT:
     def remove_plots(self):
         """Remove All Plots saved in Plots dir"""
         self._log.info("Deleting plots...")
-        if ('win' in sys.platform): #
+        if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
             os.system("ECHO Y | del .\\plots\\*")
         else: # UNIX System
             os.system("rm plots/*")

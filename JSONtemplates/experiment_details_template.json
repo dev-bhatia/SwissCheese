@@ -1,11 +1,11 @@
 {
-  "Term" : "Winter 2020",
-  "Term Start Date" : "2020-01-23",
-  "22" : {
+  "Term" : "<Quarter> <Year>",
+  "Term Start Date" : "<2020-0n-nn>",
+  "<Cage-Number>" : {
           "Day 0" : "2020-01-23",
-          "3" : ["Saline", ""]
+          "<Mouse-Number>" : ["<Feature>", "<DEATH-DATE>", "<START-DATE-IF-DIFF-FROM-Day-0>"]
         },
-  "23" : {
+  "<Cage-Number>" : {
           "Day 0" : "2020-01-23",
           "6" : ["Colchicine", "", "2020-01-27"],
           "5" : ["Colchicine", ""],
