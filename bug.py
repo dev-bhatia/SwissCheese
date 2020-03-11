@@ -46,14 +46,10 @@ def main():
             mickey_mouse.make_plot()
 
     # Create Email
-    # snail_mail = MattMAIL.MattMAIL(log)
-    # # TODO: try using the -- ting
-    # try:
-    #     mode = sys.argv[1]
-    # except IndexError as e:
-    #     mode = "developer_mode"
-    # snail_mail.snail_mail(mode)
-    # mickey_mouse.remove_plots()
+    snail_mail = MattMAIL.MattMAIL(log)
+    snail_mail.snail_mail("developer_mode")
+    mickey_mouse.remove_plots()
+    mickey_mouse.remove_stdout()
 
 if __name__=="__main__":
     main()

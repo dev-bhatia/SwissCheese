@@ -289,3 +289,12 @@ class MattPLOT:
         else: # UNIX System
             os.system("rm plots/*")
         self._log.info("Done deleting plots...")
+
+    def remove_stdout(self):
+        """Remove Log from local dir, since it's attached in the emails"""
+        self._log.info("Deleting log...")
+        if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
+            os.system("ECHO Y | del today.log")
+        else: # UNIX System
+            os.system("rm today.log")
+        self._log.info("Done deleting log...")

@@ -29,7 +29,6 @@ class MattLOG:
         formatter = logging.Formatter(fmt="%(asctime)s %(levelname)-8s - %(message)s",
                                       datefmt="%m-%d-%Y %I:%M:%S %p")
         # Idenitfy where Logs should be saved
-        # handler = logging.FileHandler("~/MouseBehavior/logs/{}.log".format(filename), mode='w')
         handler = logging.FileHandler("logs/{}.log".format(filename), mode='w')
         handler.setFormatter(formatter)
         screen_handler = logging.StreamHandler(stream=sys.stdout)
