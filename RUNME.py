@@ -5,6 +5,12 @@ import datetime
 from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL
 
 def main():
+    # Create logs and plots directories if they do not already exist
+    if not os.path.exists("logs"):
+        os.mkdir("logs")
+    if not os.path.exists("plots"):
+        os.mkdir("plots")
+
     # Remove all logs from logs dir if Monday (clean logs on weekly basis)
     if not (datetime.datetime.today().weekday()):
         os.system("rm logs/*")
