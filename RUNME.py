@@ -13,6 +13,16 @@ def main():
     tree = MattLOG.MattLOG()
     log = tree.create_log("MouseBehavior")
 
+    # Assert if debug mode or team mode
+    # debug -> enums: None or any string except "team"
+    # team -> email is sent to entire team, rather than current developer
+    try:
+        mode = sys.argv[1]
+        log.info("Running as {}".foramt(mode))
+    except IndexError as e:
+        mode = "developer_mode"
+        log.info("Running as Developer")
+
     # Obtain All Quarterly Data
     with open("experiment_details.json", "r") as f:
             experiement = json.load(f)
@@ -47,12 +57,9 @@ def main():
 
     # Create Email
     snail_mail = MattMAIL.MattMAIL(log)
-    try:
-        mode = sys.argv[1]
-    except IndexError as e:
-        mode = "developer_mode"
     snail_mail.snail_mail(mode)
     mickey_mouse.remove_plots()
+    # Remove tmp log
     tree.remove_emailed_log()
 
 if __name__=="__main__":
