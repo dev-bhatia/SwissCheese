@@ -48,8 +48,6 @@ def main():
     # Create Email
     snail_mail = MattMAIL.MattMAIL(log)
     snail_mail.snail_mail("developer_mode")
-    mickey_mouse.remove_plots()
-    mickey_mouse.remove_stdout()
 
 if __name__=="__main__":
     main()

@@ -53,7 +53,7 @@ def main():
         mode = "developer_mode"
     snail_mail.snail_mail(mode)
     mickey_mouse.remove_plots()
-    mickey_mouse.remove_stdout()
+    tree.remove_emailed_log()
 
 if __name__=="__main__":
     main()

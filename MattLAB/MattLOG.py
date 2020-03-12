@@ -38,3 +38,12 @@ class MattLOG:
         logger.addHandler(handler)
         logger.addHandler(screen_handler)
         return logger
+
+    def remove_emailed_log(self):
+        """Remove Log from local dir, since it's attached in the emails"""
+        self._log.info("Deleting log...")
+        if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
+            os.system("ECHO Y | del today.log")
+        else: # UNIX System
+            os.system("rm today.log")
+        self._log.info("Done deleting log...")
