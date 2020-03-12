@@ -66,7 +66,7 @@ def main():
     snail_mail.snail_mail(mode)
     mickey_mouse.remove_plots()
     # Remove tmp log
-    tree.remove_emailed_log()
+    tree.remove_emailed_log(log)
 
 if __name__=="__main__":
     main()
