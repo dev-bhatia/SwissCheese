@@ -2,7 +2,7 @@
 This program runs on both UNIX & Windows Systems
 
 For Windwos, run the following in Powershell
-    shell> python RUNME.py | set-content -encoding UTF8 today.log
+    shell> python RUNME.py | Out-File today.log -encoding UTF8 
 
 On UNIX, run the following in your terminal
     shell> python RUNME.py | tee today.log
@@ -75,8 +75,10 @@ def main():
     snail_mail = MattMAIL.MattMAIL(log)
     snail_mail.snail_mail(mode)
     mickey_mouse.remove_plots()
-    # Remove tmp log
-    tree.remove_emailed_log(log)
 
 if __name__=="__main__":
     main()
+    if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
+        os.system("ECHO Y | del today.log")
+    else: # UNIX System
+        os.system("rm today.log")
