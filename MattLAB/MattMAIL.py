@@ -71,7 +71,7 @@ class MattMAIL:
 
             # Attach Today's Output Lot
             filename = "today.log"
-            f = open(filename)
+            f = open(filename, encoding="utf-8")
             attachment = MIMEText(f.read())
             attachment.add_header('Content-Disposition', 'attachment', filename=filename)
             msgRoot.attach(attachment)

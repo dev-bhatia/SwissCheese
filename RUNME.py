@@ -1,3 +1,13 @@
+"""
+This program runs on both UNIX & Windows Systems
+
+For Windwos, run the following in Powershell
+    shell> python RUNME.py | set-content -encoding UTF8 today.log
+
+On UNIX, run the following in your terminal
+    shell> python RUNME.py | tee today.log
+"""
+
 import os
 import sys
 import json
