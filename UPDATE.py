@@ -18,3 +18,5 @@ def execute_command(cmd):
 # Update branch to latest version
 execute_command("git fetch")
 execute_command("git reset --hard origin/master")
+
+# The update worked!
