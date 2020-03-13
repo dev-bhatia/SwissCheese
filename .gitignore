@@ -2,3 +2,5 @@ database_credentials.json
 email_credentials.json
 logs/*
 plots/*
+today.log
+.DS_Store
