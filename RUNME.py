@@ -2,7 +2,7 @@
 This program runs on both UNIX & Windows Systems
 
 For Windwos, run the following in Powershell
-    shell> python RUNME.py | Out-File today.log -encoding UTF8 
+    shell> python RUNME.py | Out-File today.log -encoding UTF8
 
 On UNIX, run the following in your terminal
     shell> python RUNME.py | tee today.log
@@ -77,6 +77,7 @@ def main():
     mickey_mouse.remove_plots()
 
 if __name__=="__main__":
+    sys.exit() # Stopping all runs for COVID-19 
     main()
     if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
         os.system("ECHO Y | del today.log")
