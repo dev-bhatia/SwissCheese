@@ -1,11 +1,6 @@
 """
 This program runs on both UNIX & Windows Systems
-
-For Windwos, run the following in Powershell
-    shell> python RUNME.py | Out-File today.log -encoding UTF8
-
-On UNIX, run the following in your terminal
-    shell> python RUNME.py | tee today.log
+    shell> python RUNME.py
 """
 
 import os
