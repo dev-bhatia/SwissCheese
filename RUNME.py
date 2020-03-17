@@ -15,6 +15,8 @@ import datetime
 from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL
 
 def main():
+    sys.stdout = open("today.log", "w")
+
     # Create logs and plots directories if they do not already exist
     if not os.path.exists("logs"):
         os.mkdir("logs")
@@ -79,7 +81,3 @@ def main():
 if __name__=="__main__":
     # sys.exit() # Stopping all runs for COVID-19
     main()
-    if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
-        os.system("ECHO Y | del today.log")
-    else: # UNIX System
-        os.system("rm today.log")
