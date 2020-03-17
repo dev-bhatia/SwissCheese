@@ -34,7 +34,7 @@ def main():
     # team -> email is sent to entire team, rather than current developer
     try:
         mode = sys.argv[1]
-        log.info("Running as {}".foramt(mode))
+        log.info("Running as {}".format(mode))
     except IndexError as e:
         mode = "developer_mode"
         log.info("Running as Developer")
@@ -77,7 +77,7 @@ def main():
     mickey_mouse.remove_plots()
 
 if __name__=="__main__":
-    sys.exit() # Stopping all runs for COVID-19 
+    # sys.exit() # Stopping all runs for COVID-19
     main()
     if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
         os.system("ECHO Y | del today.log")
