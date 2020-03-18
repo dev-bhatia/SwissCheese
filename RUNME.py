@@ -74,5 +74,5 @@ def main():
     mickey_mouse.remove_plots()
 
 if __name__=="__main__":
-    # sys.exit() # Stopping all runs for COVID-19
+    sys.exit("Lab shutdown") # Stopping all runs for COVID-19
     main()
