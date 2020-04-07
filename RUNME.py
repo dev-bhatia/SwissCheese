@@ -7,7 +7,7 @@ import os
 import sys
 import json
 import datetime
-from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL
+from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL, MattPLOT
 
 def main():
     sys.stdout = open("today.log", "w")
@@ -65,7 +65,7 @@ def main():
             stuart_little.collect_plot_datapoints()
 
             # Generate Plot
-            mickey_mouse = MattMATH.MattPLOT(log, stuart_little)
+            mickey_mouse = MattPLOT.MattPLOT(log, stuart_little)
             mickey_mouse.make_plot()
 
     # Create Email
