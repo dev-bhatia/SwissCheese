@@ -33,9 +33,11 @@ class MattMATH:
         self._phases = []
         self._no_lick = []
         self._absolute_bias = []
+        self._plus_minus_bias = []
         self._overall_correct = []
 
     def collect_plot_datapoints(self):
+        """Loop through dates and append datapoints to proper list"""
         self.identify_dates()
         for date in self._dates:
             self._log.info("Evaluating Mouse {} on {}...".format(self._mouse, date))
@@ -43,7 +45,9 @@ class MattMATH:
             self._phases.append(self.identify_phase(table, date))
             self._no_lick.append(self.identify_no_lick(table, date))
             self._overall_correct.append(self.identify_overall_corrert(table, date))
-            self._absolute_bias.append(self.identify_absolute_bias(table, date))
+            plus_minus_bias, absolute_bias = self.identify_absolute_bias(table, date)
+            self._plus_minus_bias.append(plus_minus_bias)
+            self._absolute_bias.append(absolute_bias)
 
     def datetime_range(self, start=None, end=None):
         span = end - start
@@ -179,113 +183,27 @@ class MattMATH:
             # bias = round(bias * 100, 2)
 
             # Identify Absolute Bias
-            absolute_bias = round(abs(bias - 50), 4)
+            plus_minus_bias = round(bias - 50, 4)
+            absolute_bias = abs(plus_minus_bias)
+
             if (bias - 50) > 0:
                 self._bias_side = "RIGHT"
             elif (bias - 50) < 0:
                 self._bias_side = "LEFT"
             else:
                 self._bias_side = "NONE"
+
             # Log Stats
             self._log.info("Mouse {} on {} had {} Template Songs".format(self._mouse, date, template))
             self._log.info("Mouse {} on {} had {} Non Template Songs".format(self._mouse, date, non_template))
             self._log.info("Mouse {} on {} had Right Bias of {}".format(self._mouse, date, percent_right))
             self._log.info("Mouse {} on {} had Left Bias of {}".format(self._mouse, date, percent_left))
             self._log.info("Mouse {} on {} had Bias of {}".format(self._mouse, date, bias))
+            self._log.info("Mouse {} on {} had +/- Bias of {}".format(self._mouse, date, plus_minus_bias))
             self._log.info("Mouse {} on {} had ABS Bias of {}".format(self._mouse, date, absolute_bias))
+
         except ZeroDivisionError as e:
             self._log.warning("Mouse {} on {} had INVALID Bias!".format(self._mouse, date))
-            absolute_bias = None
+            plus_minus_bias, absolute_bias = None, None
 
-        return absolute_bias
-
-class MattPLOT:
-    def __init__(self, log, mouse_object):
-        """Library for Plotting and Saving datapoints of a MattMOUSE Object"""
-        self._log = log
-        self._subject = mouse_object
-
-    def debug(self):
-        print(self._subject._overall_correct)
-        print(self._subject._absolute_bias)
-        print(self._subject._no_lick)
-
-    def make_plot(self):
-        plt.figure(figsize=(8,5))
-        pylab.rcParams['xtick.major.pad']='8'
-        pylab.rcParams['xtick.minor.pad']='8'
-        plt.rcParams['axes.xmargin'] = 0
-
-        # Plot x-axis Phases and Colors
-        # TODO: Fix up this sloppy implementation
-        index = 0
-        # days = []
-        x_count = []
-        for phase in self._subject._phases:
-            x_count.append(index)
-            index += 1
-
-        # Set x-axis phase colors
-        days_colors = []
-        for mouse_phase in self._subject._phases:
-            if (mouse_phase == 0):
-                days_colors.append('#000000') # BLACK
-            elif (mouse_phase == 1):
-                days_colors.append('#D3200C') # RED
-            elif (mouse_phase == 2):
-                days_colors.append('#134DD6') # BLUE
-            elif (mouse_phase == 3):
-                days_colors.append('#009607') # GREEN
-            elif (mouse_phase == 4):
-                days_colors.append('#AF288B') # PURPLE
-            else:
-                days_colors.append('#FFFFFF') # WHITE
-
-        # Plot Data
-        try:
-            oc_label = "OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 4))
-        except TypeError as e:
-            oc_label = ""
-        try:
-            nl_label = "No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 4))
-        except TypeError as e:
-            nl_label = ""
-        try:
-            ab_label = "ABS Bias: {}%".format(round(self._subject._absolute_bias[len(self._subject._absolute_bias) - 1], 4))
-        except TypeError as e:
-            ab_label = ""
-        plt.plot(x_count, self._subject._overall_correct, color="g",
-                 label=oc_label, lw=1.0, marker="o")
-        plt.plot(x_count, self._subject._no_lick, color="r",
-                 label=nl_label, lw=1.0, marker="o")
-        plt.plot(x_count, self._subject._absolute_bias, color="b",
-                 label=ab_label, lw=1.0, marker="o")
-
-        # Format titles
-        plt.yticks(np.arange(0, 101, step=10))
-        plt.xticks(x_count, fontsize='small', rotation='-22.5')
-        for ticklabel, tickcolor in zip(plt.gca().get_xticklabels(), days_colors):
-            ticklabel.set_color(tickcolor)
-
-        plt.grid()
-        plt_title = "Cage {} Mouse {} - {} - Phase {} - {} Bias".format(
-                        self._subject._cage,
-                        self._subject._mouse,
-                        self._subject._feature,
-                        self._subject._phases[len(self._subject._phases) - 1],
-                        self._subject._bias_side)
-        plt.legend(title=plt_title, title_fontsize="large", fontsize="medium",
-                   loc="upper center", bbox_to_anchor=(0.5, 1.15),
-                   ncol=3, fancybox=True)
-        plt.xlabel('Day')
-        plt.ylabel('Performance')
-        plt.savefig("plots/m{}.png".format(self._subject._mouse))
-
-    def remove_plots(self):
-        """Remove All Plots saved in Plots dir"""
-        self._log.info("Deleting plots...")
-        if (('win32' or 'win64') in sys.platform): # If this runs on Windows OS
-            os.system("ECHO Y | del .\\plots\\*")
-        else: # UNIX System
-            os.system("rm plots/*")
-        self._log.info("Done deleting plots...")
+        return plus_minus_bias, absolute_bias

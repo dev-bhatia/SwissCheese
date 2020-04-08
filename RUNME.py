@@ -26,9 +26,9 @@ def main():
     tree = MattLOG.MattLOG()
     log = tree.create_log("MouseBehavior")
 
-    # Assert if debug mode or team mode
-    # debug -> enums: None or any string except "team"
-    # team -> email is sent to entire team, rather than current developer
+    # Assert if debug mode or team mode (default: debug mode)
+    #   debug -> enums: None or any string except "team"
+    #   team -> email is sent to entire team, rather than current developer
     try:
         mode = sys.argv[1]
         log.info("Running as {}".format(mode))
@@ -57,9 +57,11 @@ def main():
             except Exception as e:
                 start_date = cage["Day 0"]
             # Iterate thorugh data table and generate Mouse Objects
-            if death_date:
-                #stuart_little = MattMATH.MattMOUSE(log, data_table, start_date, cage_num, mouse, feature, end_date=death_date)
-            	log.info("Skipping mouse {} since it is DEAD".format(mouse))
+            if (death_date):
+                if (experiement["Include Term Dead Mice"] == "Yes"):
+                    stuart_little = MattMATH.MattMATH(log, data_table, start_date, cage_num, mouse, feature, end_date=death_date)
+                else:
+                    log.info("Skipping mouse {} since it PASSED on {}".format(mouse, death_date))
             else:
                 stuart_little = MattMATH.MattMATH(log, data_table, start_date, cage_num, mouse, feature)
             stuart_little.collect_plot_datapoints()
