@@ -1,6 +1,11 @@
 {
   "Term" : "Winter 2020",
   "Term Start Date" : "2020-01-23",
+  "Term Template Cage" : {
+                          "Day 0" : "YYYY-MM-DD",
+                          "Mouse #" : ["FEATURE", "DEATH DATE", "DIFF START DATE (optional)"],
+                          "Mouse #" : ["FEATURE", "DEATH DATE", "DIFF START DATE (optional)"]
+                         },
   "43" : {
           "Day 0" : "2020-02-28",
           "3" : ["0.267 uL/mg", "2020-03-17"],
