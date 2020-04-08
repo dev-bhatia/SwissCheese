@@ -41,7 +41,7 @@ def main():
             experiement = json.load(f)
 
     # Obtain All Quarterly Data
-    data_sql = MattSQL.MattSQL(log, experiement["Term Start Date"])
+    data_sql = MattSQL.MattSQL(log, start_date=experiement["Term Start Date"])
     data_table = data_sql.execute_querry(data_sql.format_querry())
 
     cage_nums = [key for key in experiement if "Term" not in key]

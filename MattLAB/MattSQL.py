@@ -16,11 +16,17 @@ import mysql.connector
 # TODO: Allow User to fetch data for one mouse
 
 class MattSQL:
-    def __init__(self, log, start_date):
+    def __init__(self, log, start_date=False):
         """Initialize Data Values to use in SQL Querry(ies)"""
         self._log = log
-        self._start_date = start_date
-        self._end_date = str(datetime.datetime.now())[:10]
+
+        if not start_date:
+            self._log.info("Start Date not specified")
+        else:
+            self._start_date = start_date
+            self._end_date = str(datetime.datetime.now())[:10]
+            self._log.info("Set Start {} & End {}".format(self._start_date, self._end_date))
+
         try:
             with open("database_credentials.json", 'r') as f:
                 self._creds = json.load(f)
