@@ -57,16 +57,13 @@ class MattMAIL:
             msgText = MIMEText(email_msg, 'html')
             msgAlternative.attach(msgText)
 
-            # Attach Banner
+            # Attach Email Intro
             email_msg += """
-                            <font size="2"><b>Team, emails are automated by our lab computer!</b><br>
+                            <font face="courier" size="3">
+                            <b> Team, Here are performance plots with results from the most recent experiments this quarter!</b><br>
+                            Phases are seperated by colored regions on the plots, beginning with Phase 0 in White.<br>
+                            Please do not hesitate to recommend additional features or bring up issues!<br>
                             </font>
-                            <font size="2"><br><b>Please do not hesitate to recommend additional features or bring up issues!</b><br></font><br>
-                            </font>
-                            <font face="courier" size="2"></b>
-                            <b>NOTE: This email was sent from an unmonitored mailbox. Please notify a real person of any issues.</b><br>
-                            <font size="2">Phase 0: BLACK  Phase 1: <font color='red'>RED</font>  Phase 2: <font color='blue'>BLUE</font>  Phase 3: <font color='green'>GREEN</font>  Phase 4: <font color='purple'>PURPLE</font><br><br></font>
-                            </font></b>
                          """
 
             # Attach Today's Output Lot
