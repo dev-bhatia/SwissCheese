@@ -4,7 +4,6 @@ Library to generate plots for each mouse
 # System Python
 import os
 import sys
-import pylab
 import logging
 import datetime
 import numpy as np
@@ -63,113 +62,90 @@ class MattPLOT:
             except:
                 continue
 
+        # Subtract index by 0.5 to phase shift by half a day (asthetic change)
         for index in range(len(self._subject._phases)):
             if self._subject._phases[index] == 1 and phase_1 is None:
-                phase_1 = index
+                phase_1 = index - 0.5
             if self._subject._phases[index] == 2 and phase_2 is None:
-                phase_2 = index
+                phase_2 = index - 0.5
             if self._subject._phases[index] == 3 and phase_3 is None:
-                phase_3 = index
+                phase_3 = index - 0.5
             if self._subject._phases[index] == 4 and phase_4 is None:
-                phase_4 = index
+                phase_4 = index - 0.5
 
         return [phase_1, phase_2, phase_3, phase_4]
 
     def make_plot(self):
         """Generate and Save a Behavior Performance Plot"""
-        # Config Figure
-        plt.figure(figsize=(8,5))
-        pylab.rcParams['xtick.major.pad']='8'
-        pylab.rcParams['xtick.minor.pad']='8'
-        plt.rcParams['axes.xmargin'] = 0
+        self._log.info("Creating Plot for Mouse {}".format(self._subject._mouse))
+        # Obtain Data Labels # TODO: Syntax for try/except
+        try: oc_label = "OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 4))
+        except TypeError as e: oc_label = ""
 
-        # Set x-axis phase colors
-        days_colors = []
-        for mouse_phase in self._subject._phases:
-            if (mouse_phase == 0):
-                days_colors.append('#000000') # BLACK
-            elif (mouse_phase == 1):
-                days_colors.append('#D3200C') # RED
-            elif (mouse_phase == 2):
-                days_colors.append('#134DD6') # BLUE
-            elif (mouse_phase == 3):
-                days_colors.append('#009607') # GREEN
-            elif (mouse_phase == 4):
-                days_colors.append('#AF288B') # PURPLE
-            else:
-                days_colors.append('#FFFFFF') # WHITE
+        try: nl_label = "No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 4))
+        except TypeError as e: nl_label = ""
 
-        # Obtain Data Labels
-        try:
-            oc_label = "OvAll Corr: {}%".format(round(self._subject._overall_correct[len(self._subject._overall_correct) - 1], 4))
-        except TypeError as e:
-            oc_label = ""
-        try:
-            nl_label = "No Lick: {}%".format(round(self._subject._no_lick[len(self._subject._no_lick) - 1], 4))
-        except TypeError as e:
-            nl_label = ""
-        # No Longer Plotting ABS Bias
-        # try:
-        #     ab_label = "ABS Bias: {}%".format(round(self._subject._absolute_bias[len(self._subject._absolute_bias) - 1], 4))
-        # except TypeError as e:
-        #     ab_label = ""
-        try:
-            pm_label = "+/- Bias: {}%".format(round(self._subject._plus_minus_bias[len(self._subject._plus_minus_bias) - 1], 4))
-        except TypeError as e:
-            pm_label = ""
+        try: pm_label = "+/- Bias: {}%".format(round(self._subject._plus_minus_bias[len(self._subject._plus_minus_bias) - 1], 4))
+        except TypeError as e: pm_label = ""
 
-        # Plot Data
+        # Create figure - # NOTE: Bias is Plotted on Axis 2
+        fig, ax1 = plt.subplots(figsize=(8,5))
+        ax2 = ax1.twinx()
         x_count = range(0, len(self._subject._phases))
-        plt.plot(x_count, self._subject._overall_correct, color="g",
-                 label=oc_label, lw=1.0, marker="o")
-        plt.plot(x_count, self._subject._no_lick, color="r",
-                 label=nl_label, lw=1.0, marker="o")
-        # No Longer Plotting ABS Bias
-        # plt.plot(x_count, self._subject._absolute_bias, color="b",
-        #         label=ab_label, lw=1.0, marker="o")
-        plt.plot(x_count, self._subject._plus_minus_bias, color="b",
-                 label=pm_label, lw=1.0, marker="o")
+        ovCorr_line = ax1.plot(x_count, self._subject._overall_correct, color="g", label=oc_label, lw=1.75, marker="o")
+        noLick_line = ax1.plot(x_count, self._subject._no_lick, color="r", label=nl_label, lw=1.75, marker="o")
+        pmBias_line = ax2.plot(x_count, self._subject._plus_minus_bias, color="b", label=pm_label, lw=1.75, marker="o")
+        center_format_space = "                             "
+        ax1.set_xlabel("Day")
+        ax1.set_ylabel(center_format_space + "Performance")
+        ax2.set_ylabel("Bias" + center_format_space, color="b")
+        lines = ovCorr_line + noLick_line + pmBias_line
 
-        # Color Phase regions & Bounds
-        phase_indicies = self.phase_changes()
-        plt.axvspan(0, phase_indicies[0], facecolor='#FFFFFF', alpha=1) # PHASE 0 - GRAY
-        plt.axvspan(phase_indicies[0], len(x_count), facecolor='#ffedc9', alpha=1) # PHASE 1 - YELLOW
-        plt.axvspan(phase_indicies[1], len(x_count), facecolor='#c9ffe0', alpha=1) # PHASE 2 - GREEN
-        plt.axvspan(phase_indicies[2], len(x_count), facecolor='#c9e2ff', alpha=1) # PHASE 3 - BLUE
-        plt.axvspan(phase_indicies[3], len(x_count), facecolor='#ffc9cf', alpha=1) # PHASE 4 - RED
-        plt.hlines(0, 0, len(x_count), linestyles="dashed", colors="#000000", lw=2)
-
-        # Format x and y ticks
         plt.xticks(x_count, fontsize='small', rotation='-22.5')
-        # for ticklabel, tickcolor in zip(plt.gca().get_xticklabels(), days_colors):
-        #     ticklabel.set_color(tickcolor)
-        y_axis_lower_threshold = MattPLOT.list_min(self._subject._plus_minus_bias)
-        if (y_axis_lower_threshold < -31.0):
-            plt.yticks(np.arange(-50, 101, step=10))
-        elif (y_axis_lower_threshold < 0.0):
-            plt.yticks(np.arange(-30, 101, step=10))
-        else:
-            plt.yticks(np.arange(0, 101, step=10))
 
-        # Color negative yticks
-        count = len(plt.gca().get_yticklabels())
-        if (len(plt.gca().get_yticklabels()) > 11):
-            for ticklabel in plt.gca().get_yticklabels():
-                if (len(plt.gca().get_yticklabels()) - count < len(plt.gca().get_yticklabels()) - 11):
-                    ticklabel.set_color("#616161") # Grayscale negative y-axis ticks
-                count -= 1
+        # Color Phase Regions on Plot
+        phase_indicies = self.phase_changes()
+        ax1.axvspan(0, phase_indicies[0], facecolor='#feffba', alpha=1)               # PHASE 0
+        ax1.axvspan(phase_indicies[0], len(x_count), facecolor='#9effc0', alpha=0.5)  # PHASE 1
+        ax1.axvspan(phase_indicies[1], len(x_count), facecolor='#a1dcff', alpha=0.5)  # PHASE 2
+        ax1.axvspan(phase_indicies[2], len(x_count), facecolor='#ca9eff', alpha=0.25) # PHASE 3
+        ax1.axvspan(phase_indicies[3], len(x_count), facecolor='#ffe0e0', alpha=1)    # PHASE 4
+        ax2.hlines(0, 0, len(x_count), linestyles="solid", colors="#000000", lw=1)    # 0 line
 
-        # Set Labels & Titles
-        plt.grid(axis="x")
+        # Add Legend, Title, Most Recent Values, & SAVE Plot
+        ax1.grid(axis="x")
+        ax1.autoscale(axis="both", tight=True)
+        ax2.set_yticks(np.arange(-50, 101, step=10))
+        ax2.use_sticky_edges=True
+        ax1.set_yticks(np.arange(-50, 101, step=10))
+
+        # Set Tick Colors for Bias Axis
+        count = 0
+        for ticklabel in ax2.get_yticklabels():
+            if (count > 10):
+                ticklabel.set_color('#FFFFFF')
+            else:
+                ticklabel.set_color('b')
+            count +=1
+
+        # Set Tick Colors for Performance Axis
+        count = 0
+        for ticklabel in ax1.get_yticklabels():
+            if (count >= 5):
+                continue # Change tickcolor in future here
+            else:
+                ticklabel.set_color('#FFFFFF')
+            count += 1
+
         plt_title = "Cage {} Mouse {} - {} - Phase {} - {} Bias".format(
                         self._subject._cage,
                         self._subject._mouse,
                         self._subject._feature,
                         self._subject._phases[len(self._subject._phases) - 1],
                         self._subject._bias_side)
-        plt.legend(title=plt_title, title_fontsize="large", fontsize="medium",
+        ax1.legend(lines, [line.get_label() for line in lines],
+                   title=plt_title, title_fontsize="large", fontsize="medium",
                    loc="upper center", bbox_to_anchor=(0.5, 1.15),
-                   ncol=3, fancybox=True)
-        plt.xlabel('Day')
-        plt.ylabel('Performance')
+                   ncol=3, fancybox=True, frameon=False)
+
         plt.savefig("plots/m{}.png".format(self._subject._mouse))
