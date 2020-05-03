@@ -178,6 +178,22 @@ class MattMATH:
                         if (row[4] != 0 and row[5] == 1):
                             left_incorrect += 1
         try:
+            # NOTE: Are my trials over or under the recoreded amount in the journal
+            # NOTE: Correlation between diff. types of errors on certain days
+
+            # Correlations between lick times and correctness
+                # Licking during songs better than licking at end of song
+                # What's correlating for a mouse to become an expert mouse!
+                # Start with expert mice and see what they have in common? (Take all expert mice)
+                # HYPOTHESIS:
+                    # 5 expert mice, (CCC) & (next song) [Get to P4 = Expert], maybe 5 mice to P4 on 3 songs (super expert)
+                    # 5 mice train for same amt of days on avg, but did not reach P4 on 2nd song
+                # Make sure mice did not have headbar problems
+                # 1. Expert Mice have low No-Lick % during P1, P2.
+                # 2. Expert Mice learn to lick after the song is over, rather than during song (Listen to whole song)
+                # 3. Expert Mice not only lick after, but % Baseline Weight hovers at intermediate weight (~85-90%)
+                # 4. Expert Mice, before becomeing experts have bias go to 0.
+
             # Identify Bias
             percent_right = round((right / template) * 100, 2)
             percent_left = round((left / non_template) * 100, 2)

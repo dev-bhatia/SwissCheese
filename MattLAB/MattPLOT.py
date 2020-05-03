@@ -9,6 +9,9 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
+# TODO: Phase Labels on bottom and increase contrast on phase blocks
+# Blue to Green to Yellow to Red
+
 class MattPLOT:
     def __init__(self, log, mouse_object):
         """Library for Plotting and Saving datapoints of a MattMOUSE Object"""
