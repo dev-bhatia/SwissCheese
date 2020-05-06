@@ -89,16 +89,16 @@ def main():
                 stuart_little = MattMATH.MattMATH(log, data_table, start_date, cage_num, mouse, feature)
             stuart_little.collect_plot_datapoints()
 
-    # stuart_little = Mouse()
+    stuart_little = Mouse()
     # Generate Plot
             mickey_mouse = MattPLOT.MattPLOT(log, stuart_little)
             mickey_mouse.make_plot()
 
     # Create Email
-    # snail_mail = MattMAIL.MattMAIL(log)
-    # snail_mail.snail_mail(mode)
-    # mickey_mouse.remove_plots()
+    snail_mail = MattMAIL.MattMAIL(log)
+    snail_mail.snail_mail(mode)
+    mickey_mouse.remove_plots()
 
 if __name__=="__main__":
-    # sys.exit("Lab shutdown") # Stopping all runs for COVID-19
+    sys.exit("Lab shutdown") # Stopping all runs for COVID-19
     main()
