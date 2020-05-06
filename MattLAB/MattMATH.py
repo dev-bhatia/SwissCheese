@@ -140,49 +140,75 @@ class MattMATH:
         # Count Number of Template and Non-Template Songs
         template, non_template = 0, 0
         right, left = 0, 0
+        right_incorrect, left_incorrect = 0, 0
         if (date == self._start_date):
             for row in table:
                 if (row[6] != 0):
                     # Count Number of Template and Non-Template Songs
                     if (row[3] == 0):
                         template += 1
+                        # Count Number of Right Side Licks
+                        if (row[4] == 0 and row[5] == 1):
+                            right += 1
+                        if (row[4] != 0 and row[5] == -1):
+                            right_incorrect += 1
                     else:
                         non_template += 1
-                    # Count Number of Right Side Licks
-                    if (row[3] == 0 and row[4] == 0 and row[5] == 1):
-                        right += 1
-                    # Count Number of Left Side Licks
-                    if (row[3] != 0 and row[4] == 0 and row[5] == -1):
-                        left += 1
+                        # Count Number of Left Side Licks
+                        if (row[4] == 0 and row[5] == -1):
+                            left += 1
+                        if (row[4] != 0 and row[5] == 1):
+                            left_incorrect += 1
         else:
             for row in table:
                 if (row[6] == 0):
                     # Count Number of Template and Non-Template Songs
                     if (row[3] == 0):
                         template += 1
+                        # Count Number of Right Side Licks
+                        if (row[4] == 0 and row[5] == 1):
+                            right += 1
+                        if (row[4] != 0 and row[5] == -1):
+                            right_incorrect += 1
                     else:
                         non_template += 1
-                    # Count Number of Right Side Licks
-                    if (row[3] == 0 and row[4] == 0 and row[5] == 1):
-                        right += 1
-                    # Count Number of Left Side Licks
-                    if (row[3] > 0 and row[4] == 0 and row[5] == -1):
-                        left += 1
+                        # Count Number of Left Side Licks
+                        if (row[4] == 0 and row[5] == -1):
+                            left += 1
+                        if (row[4] != 0 and row[5] == 1):
+                            left_incorrect += 1
         try:
+            # NOTE: Are my trials over or under the recoreded amount in the journal
+            # NOTE: Correlation between diff. types of errors on certain days
+
+            # Correlations between lick times and correctness
+                # Licking during songs better than licking at end of song
+                # What's correlating for a mouse to become an expert mouse!
+                # Start with expert mice and see what they have in common? (Take all expert mice)
+                # HYPOTHESIS:
+                    # 5 expert mice, (CCC) & (next song) [Get to P4 = Expert], maybe 5 mice to P4 on 3 songs (super expert)
+                    # 5 mice train for same amt of days on avg, but did not reach P4 on 2nd song
+                # Make sure mice did not have headbar problems
+                # 1. Expert Mice have low No-Lick % during P1, P2.
+                # 2. Expert Mice learn to lick after the song is over, rather than during song (Listen to whole song)
+                # 3. Expert Mice not only lick after, but % Baseline Weight hovers at intermediate weight (~85-90%)
+                # 4. Expert Mice, before becomeing experts have bias go to 0.
+
             # Identify Bias
             percent_right = round((right / template) * 100, 2)
             percent_left = round((left / non_template) * 100, 2)
-            # percent_right = round(percent_right * 100, 2)
-            # percent_left = round(percent_left * 100, 2)
+            percent_right_incorrect = round((right_incorrect / template) * 100, 2)
+            percent_left_incorrect = round((left_incorrect / template) * 100, 2)
+
+            # TODO: M7 & M4 - really good mice
+            # NOTE: Right Bias = Percent Correct on Right Side
+            # 1. % Incorrect Right -> Left Lick during template song
+            # 2. % Incorrect Left -> Right Lick during non-template song
+
             # bias = (round(percent_right * 100, 2) / (round(percent_right * 100, 2) + round(percent_left * 100, 2)))
             bias = round((percent_right / (percent_right + percent_left)) * 100, 2)
 
-            # Format Rounding
-            # percent_right = round(percent_right * 100, 2)
-            # percent_left = round(percent_left * 100, 2)
-            # bias = round(bias * 100, 2)
-
-            # Identify Absolute Bias
+            # Identify +/- and ABS Bias
             plus_minus_bias = round(bias - 50, 4)
             absolute_bias = abs(plus_minus_bias)
 
@@ -193,11 +219,15 @@ class MattMATH:
             else:
                 self._bias_side = "NONE"
 
-            # Log Stats
+            # Log Song Stats
             self._log.info("Mouse {} on {} had {} Template Songs".format(self._mouse, date, template))
             self._log.info("Mouse {} on {} had {} Non Template Songs".format(self._mouse, date, non_template))
+            # Log Lick Side Stats
             self._log.info("Mouse {} on {} had Right Bias of {}".format(self._mouse, date, percent_right))
+            self._log.info("Mouse {} on {} had Right Incorrect of {}".format(self._mouse, date, percent_right_incorrect))
             self._log.info("Mouse {} on {} had Left Bias of {}".format(self._mouse, date, percent_left))
+            self._log.info("Mouse {} on {} had Left Incorrect of {}".format(self._mouse, date, percent_left_incorrect))
+            # Log Bias Stats
             self._log.info("Mouse {} on {} had Bias of {}".format(self._mouse, date, bias))
             self._log.info("Mouse {} on {} had +/- Bias of {}".format(self._mouse, date, plus_minus_bias))
             self._log.info("Mouse {} on {} had ABS Bias of {}".format(self._mouse, date, absolute_bias))
