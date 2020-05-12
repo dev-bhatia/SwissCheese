@@ -9,3 +9,6 @@ today.log
 
 # Other Files
 .DS_Store
+
+# One Off Scripts
+*oneOff*
