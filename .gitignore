@@ -6,9 +6,12 @@ email_credentials.json
 logs/*
 plots/*
 today.log
+sheets/*
 
 # Other Files
 .DS_Store
 
 # One Off Scripts
 *oneOff*
+
+*.xlsx

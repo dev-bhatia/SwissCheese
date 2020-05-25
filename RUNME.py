@@ -8,6 +8,7 @@ import sys
 import json
 import datetime
 import random
+import pandas as pd
 from MattLAB import MattLOG, MattSQL, MattMATH, MattMAIL, MattPLOT
 
 class Mouse:
@@ -35,15 +36,20 @@ class Mouse:
 def main():
     sys.stdout = open("today.log", "w")
 
-    # Create logs and plots directories if they do not already exist
+    # Create logs, plots, sheets directories if they do not already exist
     if not os.path.exists("logs"):
         os.mkdir("logs")
     if not os.path.exists("plots"):
         os.mkdir("plots")
+    if not os.path.exists("sheets"):
+        os.mkdir("sheets")
 
     # Remove all logs from logs dir if Monday (clean logs on weekly basis)
-    if not (datetime.datetime.today().weekday()):
+    # TODO: Change this to not for just mondays
+    if (datetime.datetime.today().weekday()):
         os.system("rm logs/*")
+    if (datetime.datetime.today().weekday()):
+        os.system("rm sheets/*")
 
     # Create Logging Object
     tree = MattLOG.MattLOG()
@@ -60,7 +66,7 @@ def main():
         log.info("Running as Developer")
 
     # Obtain All Quarterly Data
-    with open("experiment_details.json", "r") as f:
+    with open("experiment_details1.json", "r") as f:
             experiement = json.load(f)
 
     # Obtain All Quarterly Data
@@ -91,14 +97,21 @@ def main():
 
     stuart_little = Mouse()
     # Generate Plot
-            mickey_mouse = MattPLOT.MattPLOT(log, stuart_little)
-            mickey_mouse.make_plot()
+    mickey_mouse = MattPLOT.MattPLOT(log, stuart_little)
+    mickey_mouse.make_plot()
+
+    # Generate Excel XLSX Spreadsheet
+    writer = pd.ExcelWriter('output.xlsx') # Arbitrary output name
+    for csvfilename in os.listdir("sheets/"):
+        df = pd.read_csv("sheets/{}".format(csvfilename))
+        df.to_excel(writer,sheet_name=os.path.splitext(csvfilename)[0])
+    writer.save()
 
     # Create Email
-    snail_mail = MattMAIL.MattMAIL(log)
-    snail_mail.snail_mail(mode)
+    # snail_mail = MattMAIL.MattMAIL(log)
+    # snail_mail.snail_mail(mode)
     mickey_mouse.remove_plots()
 
 if __name__=="__main__":
-    sys.exit("Lab shutdown") # Stopping all runs for COVID-19
+    # sys.exit("Lab shutdown") # Stopping all runs for COVID-19
     main()
