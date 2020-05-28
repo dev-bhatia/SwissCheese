@@ -15,3 +15,6 @@ sheets/*
 *oneOff*
 
 *.xlsx
+
+experiment_details0.json
+experiment_details1.json

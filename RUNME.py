@@ -66,7 +66,7 @@ def main():
         log.info("Running as Developer")
 
     # Obtain All Quarterly Data
-    with open("experiment_details1.json", "r") as f:
+    with open("experiment_details.json", "r") as f:
             experiement = json.load(f)
 
     # Obtain All Quarterly Data
@@ -113,5 +113,5 @@ def main():
     mickey_mouse.remove_plots()
 
 if __name__=="__main__":
-    # sys.exit("Lab shutdown") # Stopping all runs for COVID-19
+    sys.exit("Lab shutdown") # Stopping all runs for COVID-19
     main()
