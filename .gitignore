@@ -10,10 +10,11 @@ sheets/*
 
 # Other Files
 .DS_Store
+*.pyc
 
 # One Off Scripts
 *oneOff*
-
+custard.py
 *.xlsx
 
 experiment_details0.json

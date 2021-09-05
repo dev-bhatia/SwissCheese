@@ -1,0 +1,22 @@
+{
+  "Term" : "Summer 2020",
+  "Term Start Date" : "2019-07-20",
+  "Term Template Cage (LAST 3 DIGITS)" : {
+                          "Day 0" : "YYYY-MM-DD",
+                          "Mouse #1" : ["MOUSE-LABEL", "STOP-DATE-INCLUSIVE", "DIFF START DATE (optional)"],
+                          "Mouse #2" : ["MOUSE-LABEL", "STOP-DATE-INCLUSIVE", "DIFF START DATE (optional)"]
+                         },
+  "36" : {
+          "Day 0" : "2020-07-31",
+          "1" : ["Colchicine", ""]
+        },
+  "37" : {
+    "Day 0" : "2020-08-01",
+    "5" : ["Colchicine", ""],
+    "6" : ["Colchicine", ""],
+    "7" : ["Saline", ""],
+    "8" : ["Saline", ""]
+  },
+  "Include Term Dead Mice" : "Yes"
+}
+ 

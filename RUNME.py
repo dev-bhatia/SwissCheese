@@ -65,8 +65,8 @@ def main():
         mode = "developer_mode"
         log.info("Running as Developer")
 
-    # Obtain All Quarterly Data
-    with open("experiment_details.json", "r") as f:
+    # Obtain Quarterly Experiment Details
+    with open("experiment_details_SU20.json", "r") as f:
             experiement = json.load(f)
 
     # Obtain All Quarterly Data
@@ -95,10 +95,9 @@ def main():
                 stuart_little = MattMATH.MattMATH(log, data_table, start_date, cage_num, mouse, feature)
             stuart_little.collect_plot_datapoints()
 
-    stuart_little = Mouse()
-    # Generate Plot
-    mickey_mouse = MattPLOT.MattPLOT(log, stuart_little)
-    mickey_mouse.make_plot()
+            # Generate Plot
+            mickey_mouse = MattPLOT.MattPLOT(log, stuart_little)
+            mickey_mouse.make_plot()
 
     # Generate Excel XLSX Spreadsheet
     writer = pd.ExcelWriter('output.xlsx') # Arbitrary output name
@@ -108,10 +107,10 @@ def main():
     writer.save()
 
     # Create Email
-    # snail_mail = MattMAIL.MattMAIL(log)
-    # snail_mail.snail_mail(mode)
+    snail_mail = MattMAIL.MattMAIL(log)
+    snail_mail.snail_mail(mode)
     mickey_mouse.remove_plots()
 
 if __name__=="__main__":
-    sys.exit("Lab shutdown") # Stopping all runs for COVID-19
+    # sys.exit("Lab shutdown") # Stopping all runs for COVID-19
     main()

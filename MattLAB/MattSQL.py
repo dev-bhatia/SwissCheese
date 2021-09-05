@@ -71,3 +71,9 @@ class MattSQL:
         dbcursor.close()
         db_access.close()
         return _table
+
+
+# Is the lick time for teh start of the song, or start of the trial.
+# Do we have a timing for the start/end of the song to figure out delay between song start and lick.
+# Why some trials don't have lick times
+# Why some trials say no lick, but have lick times.

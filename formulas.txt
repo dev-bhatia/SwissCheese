@@ -1,0 +1,54 @@
+----
+BIAS
+----
+
+                       % Licks on RIGHT side
+BIAS = --------------------------------------------------- * 100
+        (  % Licks on LEFT side + % Licks on RIGHT side )
+
+
+                          # Right Licks
+% Licks on RIGHT side = ------------------ * 100
+			 # Template Songs
+
+                            # Left Licks
+% Licks on LEFT side = ---------------------- * 100
+			# Non Template Songs
+
+If BIAS - 50 > 0, then RIGHT bias
+If BIAS - 50 < 0, then LEFT bias
+If BIAS - 50 = 0, then NO bias
+
+-------------
+ABSOLUTE BIAS
+-------------
+
+ABSOLUTE BIAS = | BIAS - 50 |
+
+---------
+% Correct
+---------
+
+We don't track % Correct. We do track the # of correct licks though.
+
+
+-------------------
+% Incorrect (Wrong)
+-------------------
+
+We don't track % Incorrect. We do track the # incorrect licks though.
+
+-----------------
+% Overall Correct
+-----------------
+                              # Correct Licks
+% Overall Correct = -------------------------------------- * 100
+                      # Correct Licks + # Incorrect Licks
+
+For Day 0 (Phase 0)...
+# Correct Licks = Count Lick that is correct for Free Drop
+# Incorrect Licks = Count Lick that is incorrect for Free Drop
+
+For Day 1 (Phase 1) and Beyond...
+# Correct Licks = Count Lick that is correct for Non Free Drop
+# Incorrect Licks = Count Lick that is incorrect for Non Free Drop 
